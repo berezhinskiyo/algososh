@@ -36,34 +36,35 @@ export const StringComponent: React.FC = () => {
     arr[secondIndex] = temp;
   };
 
-  const selectionSort = (arr: string[]) => {
+  async function selectionSort<T>(arr: T[], callback?: (arr: TCircle[], i: number, maxInd: number) => void) {
     const { length } = arr;
     for (let i = 0; i < length - 1; i++) {
       let maxInd = i;
       for (let j = i; j < length; j++) {
-        if (arr[i] > arr[j]) maxInd = j;
-      }
-      if (i !== maxInd) swap<string>(arr, i, maxInd);
-    }
-
-  };
-  const selectionSortTCircle = async (arr: TCircle[]) => {
-    const { length } = arr;
-    for (let i = 0; i < length - 1; i++) {
-      let maxInd = i;
-      for (let j = i; j < length; j++) {
-        if (arr[i].circle > arr[j].circle) maxInd = j;
+        if (!callback && arr[maxInd] < arr[j]) {
+          maxInd = j;
+        }
+        if (callback && (arr[maxInd] as unknown as TCircle).circle > (arr[j] as unknown as TCircle).circle) {
+          maxInd = j;
+        }
       }
       if (i !== maxInd) {
-        swap<TCircle>(arr, i, maxInd);
-        arr[i].state = ElementStates.Modified;
-        arr[maxInd].state = ElementStates.Modified
-        setCollection(arr.slice());
-        await sleep(2000);
+        if (!callback) swap<string>(arr as unknown as string[], i, maxInd);
+        if (callback) await callback(arr as unknown as TCircle[], i, maxInd);
       }
-    }
 
+    }
   };
+  async function callback(arr: TCircle[], i: number, maxInd: number) {
+    if (i !== maxInd) {
+      swap<TCircle>(arr, i, maxInd);
+      arr[i].state = ElementStates.Modified;
+      arr[maxInd].state = ElementStates.Modified
+      setCollection(arr.slice());
+      await sleep(1000)
+    }
+  }
+
   const expand = async (event: FormEvent<IFormElement>) => {
     event.preventDefault();
     setIsLoader(true);
@@ -71,18 +72,21 @@ export const StringComponent: React.FC = () => {
 
       const original = event.currentTarget.elements.input.value.split('');
       const sorted = original.slice();
-      selectionSort(sorted);
+      selectionSort<string>(sorted);
 
       const symbols = original.map((e, i) => { return { id: i, circle: e, state: ElementStates.Default } as TCircle; });
       setCollection(symbols);
-      await sleep(2000);
 
       for (let i = 0; i < symbols.length; i++) {
-        if (original[i] !== sorted[i]) symbols[i].state = ElementStates.Changing;
+        if (original[i] !== sorted[i]) {
+          symbols[i].state = ElementStates.Changing;
+          await sleep(1000);
+          setCollection(symbols.slice());
+        }
       }
-      setCollection(symbols.slice());
-      await sleep(2000);
-      selectionSortTCircle(symbols);
+
+      await sleep(1000);
+      await selectionSort(symbols, callback);
 
 
     } finally {
