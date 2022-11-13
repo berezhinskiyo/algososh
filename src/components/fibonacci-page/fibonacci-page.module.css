@@ -17,6 +17,12 @@
   flex-wrap: wrap;
   gap: 16px; 
 }
+
+.circle {
+margin-top: 20px; 
+}
+
+    
 .input{
   width: 377px;
 }
