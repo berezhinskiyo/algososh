@@ -42,7 +42,7 @@ export const FibonacciPage: React.FC = () => {
       const symbols: Array<TCircle> = [];
       for (let i in Object.keys(memo)) {
         symbols.push({ id: Number.parseInt(i), circle: Object.values(memo)[i].toString(), state: ElementStates.Default })
-        await sleep(1000);
+        await sleep(500);
         setCollection(symbols.slice());
       }
     } finally {
