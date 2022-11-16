@@ -30,33 +30,32 @@ export const SortingPage: React.FC = () => {
     arr.forEach(t => t.state = ElementStates.Default);
     for (let i = 0; i < length; i++) {
       let maxInd = i;
+      arr[i].state = ElementStates.Changing;
       for (let j = i; j < length; j++) {
+        if (arr[j].state !== ElementStates.Modified) arr[j].state = ElementStates.Changing;
+        if (j > 0 && arr[j - 1].state !== ElementStates.Modified) arr[j - 1].state = ElementStates.Default;
+        update({});
+        await sleep(500);
         if (deriction === Direction.Ascending) {
           if (Number.parseInt(arr[maxInd].circle) > Number.parseInt(arr[j].circle)) {
-            arr[maxInd].state = ElementStates.Default;
             maxInd = j;
-            arr[j].state = ElementStates.Changing;
-            arr[i].state = ElementStates.Changing;
-            await sleep(500);
-            update({});
           }
         }
         else {
           if (Number.parseInt(arr[maxInd].circle) < Number.parseInt(arr[j].circle)) {
-            arr[maxInd].state = ElementStates.Default;
+
             maxInd = j;
-            arr[j].state = ElementStates.Changing;
-            await sleep(500);
-            update({});
+
           }
         }
       }
       if (i !== maxInd) {
         swap(arr, i, maxInd);
       }
-      arr[deriction === Direction.Ascending ? length - i - 1 : i].state = ElementStates.Modified;
-      await sleep(500);
+      arr[i].state = ElementStates.Modified;
       update({});
+      await sleep(500);
+
     }
 
   };
@@ -66,26 +65,21 @@ export const SortingPage: React.FC = () => {
     arr.forEach(t => t.state = ElementStates.Default);
     for (let i = 0; i < length; i++) {
       for (let j = 0; j < length - i - 1; j++) {
+        arr[j + 1].state = ElementStates.Changing;
+        arr[j].state = ElementStates.Changing;
+        update({});
+        await sleep(500);
         if (deriction === Direction.Ascending) {
           if (Number.parseInt(arr[j].circle) > Number.parseInt(arr[j + 1].circle)) {
-            arr[j + 1].state = ElementStates.Changing;
-            arr[j].state = ElementStates.Changing;
-            await sleep(500);
-            update({});
             swap(arr, j, j + 1)
-            arr[j].state = ElementStates.Default;
           }
         }
         else {
           if (Number.parseInt(arr[j].circle) < Number.parseInt(arr[j + 1].circle)) {
-            arr[j + 1].state = ElementStates.Changing;
-            arr[j].state = ElementStates.Changing;
-            await sleep(500);
-            update({});
             swap(arr, j, j + 1)
-            arr[j].state = ElementStates.Default;
           }
         }
+        arr[j].state = ElementStates.Default;
       }
       arr[length - i - 1].state = ElementStates.Modified;
       await sleep(500);
@@ -95,14 +89,14 @@ export const SortingPage: React.FC = () => {
 
   };
 
-  const asc = () => {
+  const asc = async () => {
     setIsLoadingAsc(true);
-    render(Direction.Ascending);
+    await render(Direction.Ascending);
     setIsLoadingAsc(false);
   }
-  const desc = () => {
+  const desc = async () => {
     setIsLoadingDesc(true);
-    render(Direction.Descending);
+    await render(Direction.Descending);
     setIsLoadingDesc(false);
   }
   const regenerate = async () => {
@@ -115,11 +109,11 @@ export const SortingPage: React.FC = () => {
     console.log(event.target.value);
     setSortingKind(Number.parseInt(event.target.value) === 0 ? SortKind.Bubble : SortKind.Selection);
   };
-  const render = (direction: Direction) => {
+  const render = async (direction: Direction) => {
     if (sortingKind === SortKind.Bubble) {
-      bubbleSort(collection, direction);
+      await bubbleSort(collection, direction);
     } else {
-      selectionSort(collection, direction);
+      await selectionSort(collection, direction);
     }
   }
 
@@ -127,11 +121,11 @@ export const SortingPage: React.FC = () => {
     <SolutionLayout title="Сортировка массива">
 
       <form className={styles.input_box}  >
-        <RadioInput name="radio_select" label="Выбор" onChange={changeSortKind} extraClass={styles.radio} value={SortKind.Selection} checked={sortingKind === SortKind.Selection}></RadioInput>
-        <RadioInput name="radio_select" label="Пузырёк" onChange={changeSortKind} extraClass={styles.radio} value={SortKind.Bubble} checked={sortingKind === SortKind.Bubble}></RadioInput>
-        <Button isLoader={isLoadingAsc} name="asc_button" sorting={Direction.Ascending} text="По возрастанию" onClick={asc} extraClass={styles.button}></Button>
-        <Button isLoader={isLoadingDesc} name="desc_button1" sorting={Direction.Descending} text="По убыванию" onClick={desc} extraClass={styles.button}></Button>
-        <Button isLoader={isLoading} name="reload_button" text="Развернуть" onClick={regenerate} extraClass={styles.button}></Button>
+        <RadioInput disabled={isLoadingAsc || isLoadingDesc || isLoading} name="radio_select" label="Выбор" onChange={changeSortKind} extraClass={styles.radio} value={SortKind.Selection} checked={sortingKind === SortKind.Selection}></RadioInput>
+        <RadioInput disabled={isLoadingAsc || isLoadingDesc || isLoading} name="radio_select" label="Пузырёк" onChange={changeSortKind} extraClass={styles.radio} value={SortKind.Bubble} checked={sortingKind === SortKind.Bubble}></RadioInput>
+        <Button isLoader={isLoadingAsc} disabled={isLoadingDesc || isLoading} name="asc_button" sorting={Direction.Ascending} text="По возрастанию" onClick={asc} extraClass={styles.button}></Button>
+        <Button isLoader={isLoadingDesc} disabled={isLoading || isLoadingAsc} name="desc_button1" sorting={Direction.Descending} text="По убыванию" onClick={desc} extraClass={styles.button}></Button>
+        <Button isLoader={isLoading} disabled={isLoadingAsc || isLoadingDesc} name="reload_button" text="Развернуть" onClick={regenerate} extraClass={styles.button}></Button>
       </form>
 
       <div className={styles.circle_box}>

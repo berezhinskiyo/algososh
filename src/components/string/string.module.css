@@ -5,6 +5,7 @@
   max-width: 80%;
   margin: auto;
   gap: 12px; 
+  justify-content: center;
 }
 .circle_box {
   display: flex;
