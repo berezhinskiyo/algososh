@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { ElementStates } from '../types/element-states';
 export interface IFormElements extends HTMLFormControlsCollection {
   input: HTMLInputElement
@@ -10,8 +11,9 @@ export type TCircle = {
   id: number;
   circle: string;
   state: ElementStates;
-  head?: string;
-  tail?: string;
+  head?: string | ReactElement;
+  tail?: string | ReactElement;
+  next?: TCircle;
 }
 export enum SortKind {
   Bubble = 0,
