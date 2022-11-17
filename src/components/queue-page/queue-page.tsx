@@ -8,7 +8,7 @@ import { ElementStates } from "../../types/element-states";
 import { Circle } from "../ui/circle/circle";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Queue, MAX_INPUT_LENGTH, MIN_INPUT_LENGTH, QUEUE_LENGTH } from "./utils";
-import { SHORT_DELAY, LOND_DELAY, HEAD, TAIL } from "../../utils/constants";
+import { LOND_DELAY, HEAD, TAIL } from "../../utils/constants";
 
 export const QueuePage: React.FC = () => {
   const [, update] = useState({});

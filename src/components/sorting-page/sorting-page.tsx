@@ -9,7 +9,8 @@ import { sleep, swap } from "../../utils/functions";
 import { SortKind, TCircle } from "../../utils/types";
 import { ElementStates } from "../../types/element-states";
 import { Column } from "../ui/column/column";
-
+import { SHORT_DELAY } from "../../utils/constants";
+import { ARRAY_LENGTH, RANDOM_START, RANDOM_RANGE } from './utils'
 
 export const SortingPage: React.FC = () => {
 
@@ -23,7 +24,9 @@ export const SortingPage: React.FC = () => {
 
 
   const generateArray = (range: number): Array<TCircle> => {
-    return Array.from({ length: Math.floor(Math.random() * 14) + 3 }, () => Math.floor(Math.random() * range)).map<TCircle>((e, i) => { return { id: i, circle: e.toString(), state: ElementStates.Default } as TCircle; });
+    return Array.from({ length: Math.floor(Math.random() * RANDOM_RANGE) + RANDOM_START }, () =>
+      Math.floor(Math.random() * range))
+      .map<TCircle>((e, i) => { return { id: i, circle: e.toString(), state: ElementStates.Default } as TCircle; });
   }
   const selectionSort = async (arr: TCircle[], deriction: Direction) => {
     const { length } = arr;
@@ -31,11 +34,11 @@ export const SortingPage: React.FC = () => {
     for (let i = 0; i < length; i++) {
       let maxInd = i;
       arr[i].state = ElementStates.Changing;
-      for (let j = i; j < length; j++) {
+      for (let j = i + 1; j < length; j++) {
         if (arr[j].state !== ElementStates.Modified) arr[j].state = ElementStates.Changing;
-        if (j > 0 && arr[j - 1].state !== ElementStates.Modified) arr[j - 1].state = ElementStates.Default;
+        if (j > i + 1 && arr[j - 1].state !== ElementStates.Modified) arr[j - 1].state = ElementStates.Default;
         update({});
-        await sleep(500);
+        await sleep(SHORT_DELAY);
         if (deriction === Direction.Ascending) {
           if (Number.parseInt(arr[maxInd].circle) > Number.parseInt(arr[j].circle)) {
             maxInd = j;
@@ -49,12 +52,14 @@ export const SortingPage: React.FC = () => {
           }
         }
       }
+      if (i < length - 2) arr[length - 1].state = ElementStates.Default;
       if (i !== maxInd) {
+        arr[i].state = ElementStates.Default;
         swap(arr, i, maxInd);
       }
       arr[i].state = ElementStates.Modified;
       update({});
-      await sleep(500);
+      await sleep(SHORT_DELAY);
 
     }
 
@@ -68,7 +73,7 @@ export const SortingPage: React.FC = () => {
         arr[j + 1].state = ElementStates.Changing;
         arr[j].state = ElementStates.Changing;
         update({});
-        await sleep(500);
+        await sleep(SHORT_DELAY);
         if (deriction === Direction.Ascending) {
           if (Number.parseInt(arr[j].circle) > Number.parseInt(arr[j + 1].circle)) {
             swap(arr, j, j + 1)
@@ -82,7 +87,7 @@ export const SortingPage: React.FC = () => {
         arr[j].state = ElementStates.Default;
       }
       arr[length - i - 1].state = ElementStates.Modified;
-      await sleep(500);
+      await sleep(SHORT_DELAY);
       update({});
 
     }
@@ -101,8 +106,8 @@ export const SortingPage: React.FC = () => {
   }
   const regenerate = async () => {
     setIsLoading(true);
-    await sleep(500);
-    setCollection(generateArray(100));
+    await sleep(SHORT_DELAY);
+    setCollection(generateArray(ARRAY_LENGTH));
     setIsLoading(false);
   }
   const changeSortKind = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,8 +127,8 @@ export const SortingPage: React.FC = () => {
       <form className={styles.input_box}  >
         <RadioInput disabled={isLoadingAsc || isLoadingDesc || isLoading} name="radio_select" label="Выбор" onChange={changeSortKind} extraClass={styles.radio} value={SortKind.Selection} checked={sortingKind === SortKind.Selection}></RadioInput>
         <RadioInput disabled={isLoadingAsc || isLoadingDesc || isLoading} name="radio_select" label="Пузырёк" onChange={changeSortKind} extraClass={styles.radio} value={SortKind.Bubble} checked={sortingKind === SortKind.Bubble}></RadioInput>
-        <Button isLoader={isLoadingAsc} disabled={isLoadingDesc || isLoading} name="asc_button" sorting={Direction.Ascending} text="По возрастанию" onClick={asc} extraClass={styles.button}></Button>
-        <Button isLoader={isLoadingDesc} disabled={isLoading || isLoadingAsc} name="desc_button1" sorting={Direction.Descending} text="По убыванию" onClick={desc} extraClass={styles.button}></Button>
+        <Button isLoader={isLoadingAsc} disabled={isLoadingDesc || isLoading || (collection.length === 0)} name="asc_button" sorting={Direction.Ascending} text="По возрастанию" onClick={asc} extraClass={styles.button}></Button>
+        <Button isLoader={isLoadingDesc} disabled={isLoading || isLoadingAsc || (collection.length === 0)} name="desc_button1" sorting={Direction.Descending} text="По убыванию" onClick={desc} extraClass={styles.button}></Button>
         <Button isLoader={isLoading} disabled={isLoadingAsc || isLoadingDesc} name="reload_button" text="Развернуть" onClick={regenerate} extraClass={styles.button}></Button>
       </form>
 
