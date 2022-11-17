@@ -7,7 +7,7 @@ import { sleep, swap } from "../../utils/functions";
 import { Circle } from '../ui/circle/circle';
 import { Input } from '../ui/input/input';
 import { Button } from '../ui/button/button';
-
+import { LOND_DELAY } from "../../utils/constants";
 
 
 export const StringComponent: React.FC = () => {
@@ -20,47 +20,39 @@ export const StringComponent: React.FC = () => {
 
   const sort = async (arr: TCircle[]) => {
     const { length } = arr;
-    for (let i = 0; i < length; i++) {
-      let maxInd = i;
-      for (let j = i; j < length; j++) {
-        if (arr[maxInd].circle < arr[j].circle) {
-          maxInd = j;
-
-        }
-      }
-      if (i !== maxInd) {
-        arr[maxInd].state = ElementStates.Changing;
-        arr[i].state = ElementStates.Changing;
-        update({});
-        await sleep(1000);
-        swap(arr, i, maxInd);
-        arr[i].state = ElementStates.Modified;
-        arr[maxInd].state = ElementStates.Modified
-        update({});
-        await sleep(1000);
-      }
-
+    if (length === 1) {
+      arr[0].state = ElementStates.Modified;
+      update({});
+      await sleep(LOND_DELAY);
+      return;
     }
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < length / 2; i++) {
+      arr[length - 1 - i].state = ElementStates.Changing;
+      arr[i].state = ElementStates.Changing;
+      update({});
+      await sleep(LOND_DELAY);
+      swap(arr, i, length - 1 - i);
+      arr[length - 1 - i].state = ElementStates.Modified;
       arr[i].state = ElementStates.Modified;
+      update({});
+      await sleep(LOND_DELAY);
     }
-    update({});
+
   }
-
-
 
   const expand = async () => {
 
     setIsLoader(true);
 
     const symbols = input.split('').map((e, i) => { return { id: i, circle: e, state: ElementStates.Default } as TCircle; });
+    setCollection(symbols);
 
     update({});
     await sleep(1000)
-    if (symbols.length > 1) {
-      sort(symbols);
+    if (symbols.length > 0) {
+      await sort(symbols);
     }
-    setCollection(symbols);
+
 
     setIsLoader(false);
   }
@@ -77,8 +69,8 @@ export const StringComponent: React.FC = () => {
   return (
     <SolutionLayout title="Строка">
       <form className={styles.input_box}  >
-        <Input name="input" id="input" value={input} placeholder="Введите текст" maxLength={11} extraClass={styles.input} isLimitText={true} onChange={handleOnChange}></Input>
-        <Button isLoader={isLoader} name="button" text="Развернуть"  disabled={isDisabled} onClick={expand}></Button>
+        <Input disabled={isLoader} name="input" id="input" value={input} placeholder="Введите текст" maxLength={11} extraClass={styles.input} isLimitText={true} onChange={handleOnChange}></Input>
+        <Button isLoader={isLoader} name="button" text="Развернуть" disabled={isDisabled} onClick={expand}></Button>
       </form>
 
       <div className={styles.circle_box}>
