@@ -7,45 +7,26 @@ import { sleep } from "../../utils/functions";
 import { Circle } from '../ui/circle/circle';
 import { Input } from '../ui/input/input';
 import { Button } from '../ui/button/button';
+import { getFibonacciNumbers } from "../../utils/functions";
+import { SHORT_DELAY, MAX_FIBONACCI_NUMBER, MIN_FIBONACCI_NUMBER } from "../../utils/constants";
 
 export const FibonacciPage: React.FC = () => {
   const [collection, setCollection] = useState<Array<TCircle>>();
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
-  const [, update] = useState({});
   const [input, setInput] = useState('');
 
-  const fib = (n: number, memo: Record<number, number> = {}): number => {
-    if (n in memo) {
-      return memo[n];
-    }
-    if (n == 0) {
-      memo[0] = 1;
-      return memo[n];
-    }
-    if (n == 1) {
-      memo[1] = 1;
-      memo[0] = 1;
-      return memo[n];
-    }
-
-    memo[n] = fib(n - 1, memo) + fib(n - 2, memo);
-    return memo[n];
-  };
 
   const expand = async () => {
-
     setIsLoader(true);
     try {
 
       const num: number = Number.parseInt(input);
-
-      const memo: Record<number, number> = {};
-      fib(num, memo);
+      const memo: Array<number> = getFibonacciNumbers(num);
       const symbols: Array<TCircle> = [];
-      for (let i in Object.keys(memo)) {
-        symbols.push({ id: Number.parseInt(i), circle: Object.values(memo)[i].toString(), state: ElementStates.Default })
-        await sleep(500);
+      for (let i = 0; i < memo.length; i++) {
+        symbols.push({ id: i, circle: memo[i].toString(), state: ElementStates.Default })
+        await sleep(SHORT_DELAY);
         setCollection(symbols.slice());
       }
     } finally {
@@ -56,7 +37,7 @@ export const FibonacciPage: React.FC = () => {
   const handleOnChange = (event: React.FormEvent<HTMLInputElement>) => {
 
     setInput(event.currentTarget.value);
-    if (Number.parseInt(event.currentTarget.value) < 0 || Number.parseInt(event.currentTarget.value) > 19) {
+    if (Number.parseInt(event.currentTarget.value) < MIN_FIBONACCI_NUMBER || Number.parseInt(event.currentTarget.value) > MAX_FIBONACCI_NUMBER) {
 
       setIsDisabled(true);
     }
@@ -67,7 +48,7 @@ export const FibonacciPage: React.FC = () => {
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
       <form className={styles.input_box} >
-        <Input name="input" id="input" value={input} placeholder="Введите текст" max={19} extraClass={styles.input} type='number' isLimitText={true} onChange={handleOnChange}></Input>
+        <Input name="input" id="input" value={input} placeholder="Введите текст" max={MAX_FIBONACCI_NUMBER} extraClass={styles.input} type='number' isLimitText={true} onChange={handleOnChange}></Input>
         <Button isLoader={isLoader} name="button" text="Развернуть" disabled={isDisabled} onClick={expand}></Button>
       </form>
       <div className={styles.circle_box}>

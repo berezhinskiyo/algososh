@@ -106,7 +106,6 @@ export const SortingPage: React.FC = () => {
     setIsLoading(false);
   }
   const changeSortKind = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     setSortingKind(Number.parseInt(event.target.value) === 0 ? SortKind.Bubble : SortKind.Selection);
   };
   const render = async (direction: Direction) => {

@@ -1,8 +1,9 @@
 .input_box {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   box-sizing: border-box;
-  max-width: 80%;
+  max-width: 40%;
   margin: auto;
   gap: 12px; 
 }
