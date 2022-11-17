@@ -22,7 +22,7 @@ export const FibonacciPage: React.FC = () => {
     try {
 
       const num: number = Number.parseInt(input);
-      const memo: Array<number> = getFibonacciNumbers(num);
+      const memo: Array<number> = getFibonacciNumbers(num + 1);
       const symbols: Array<TCircle> = [];
       for (let i = 0; i < memo.length; i++) {
         symbols.push({ id: i, circle: memo[i].toString(), state: ElementStates.Default })
