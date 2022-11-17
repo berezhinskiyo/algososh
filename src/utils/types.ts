@@ -13,7 +13,6 @@ export type TCircle = {
   state: ElementStates;
   head?: string | ReactElement;
   tail?: string | ReactElement;
-  next?: TCircle;
 }
 export enum SortKind {
   Bubble = 0,

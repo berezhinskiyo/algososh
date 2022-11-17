@@ -7,8 +7,8 @@ import { sleep } from "../../utils/functions";
 import { Circle } from '../ui/circle/circle';
 import { Input } from '../ui/input/input';
 import { Button } from '../ui/button/button';
-import { getFibonacciNumbers } from "../../utils/functions";
-import { SHORT_DELAY, MAX_FIBONACCI_NUMBER, MIN_FIBONACCI_NUMBER } from "../../utils/constants";
+import { MAX_FIBONACCI_NUMBER, MIN_FIBONACCI_NUMBER, getFibonacciNumbers } from "./utils";
+import { SHORT_DELAY } from "../../utils/constants";
 
 export const FibonacciPage: React.FC = () => {
   const [collection, setCollection] = useState<Array<TCircle>>();
