@@ -1,8 +1,7 @@
 import { TCircle } from "../../utils/types";
 export const MAX_INPUT_LENGTH = 4;
 export const MIN_INPUT_LENGTH = 1;
-export const HEAD = 'head';
-export const TAIL = 'tail';
+
 
 export class LinkedListNode<T extends TCircle> {
     value: T;
@@ -51,7 +50,7 @@ export class LinkedList<T extends TCircle> {
         }
     }
     addByIndex(index: Number, value: T) {
-        let i = 0;
+
         let arr = this.toArray();
         for (let i = 0; i < arr.length; i++) {
             let curr = arr[i];
@@ -67,9 +66,7 @@ export class LinkedList<T extends TCircle> {
 
     }
     deleteByIndex(index: Number) {
-        let i = 0;
-        let curr: LinkedListNode<T> | undefined = this.head;
-        let prev: LinkedListNode<T> | undefined = undefined;
+
         let arr = this.toArray();
         for (let i = 0; i < arr.length; i++) {
             if (i === index) {

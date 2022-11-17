@@ -9,8 +9,8 @@ import { ElementStates } from "../../types/element-states";
 import { Circle } from "../ui/circle/circle";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
-import { SHORT_DELAY, LOND_DELAY } from "../../utils/constants";
-import { LinkedList, MAX_INPUT_LENGTH, MIN_INPUT_LENGTH, HEAD, TAIL } from "./utils";
+import { SHORT_DELAY, LOND_DELAY, HEAD, TAIL } from "../../utils/constants";
+import { LinkedList, MAX_INPUT_LENGTH, MIN_INPUT_LENGTH } from "./utils";
 
 
 export const ListPage: React.FC = () => {
@@ -26,7 +26,15 @@ export const ListPage: React.FC = () => {
   const [input, setInput] = useState('');
   const [isInputIndexValid, setIsInputIndexValid] = useState(false);
   const [inputIndex, setInputIndex] = useState('');
-  const [list, setList] = useState<LinkedList<TCircle>>(new LinkedList<TCircle>(Array.from({ length: Math.floor(Math.random() * 4) + 3 }, () => Math.floor(Math.random() * 6)).map<TCircle>((e, i, arr) => { return { id: i, circle: e.toString(), state: ElementStates.Default, head: i === 0 ? HEAD : '', tail: i === arr.length - 1 ? TAIL : '' } as TCircle; })))
+  const [list] = useState<LinkedList<TCircle>>(new LinkedList<TCircle>(
+    Array.from({ length: Math.floor(Math.random() * 4) + 3 }, () => Math.floor(Math.random() * 6))
+      .map<TCircle>((e, i, arr) => {
+        return {
+          id: i, circle: e.toString(), state: ElementStates.Default,
+          head: i === 0 ? HEAD : '',
+          tail: i === arr.length - 1 ? TAIL : ''
+        } as TCircle;
+      })))
 
   const setHeadTail = () => {
     if (list.head) list.head.value.head = HEAD;
@@ -195,7 +203,7 @@ export const ListPage: React.FC = () => {
 
       for (let i = 0; i < arr.length; i++) {
         let e = arr[i].value;
-        let prev: TCircle | undefined = undefined;
+
 
         e.state = ElementStates.Changing;
         e.state = ElementStates.Changing;
