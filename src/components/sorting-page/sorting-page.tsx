@@ -46,15 +46,13 @@ export const SortingPage: React.FC = () => {
         }
         else {
           if (Number.parseInt(arr[maxInd].circle) < Number.parseInt(arr[j].circle)) {
-
             maxInd = j;
-
           }
         }
       }
       if (i < length - 2) arr[length - 1].state = ElementStates.Default;
       if (i !== maxInd) {
-        arr[i].state = ElementStates.Default;
+        if (i < length - 2) arr[i].state = ElementStates.Default;
         swap(arr, i, maxInd);
       }
       arr[i].state = ElementStates.Modified;

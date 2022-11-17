@@ -8,7 +8,7 @@ import { ElementStates } from "../../types/element-states";
 import { Circle } from "../ui/circle/circle";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Queue, MAX_INPUT_LENGTH, MIN_INPUT_LENGTH, QUEUE_LENGTH } from "./utils";
-import { LOND_DELAY, HEAD, TAIL } from "../../utils/constants";
+import { LONG_DELAY, HEAD, TAIL } from "../../utils/constants";
 
 export const QueuePage: React.FC = () => {
   const [, update] = useState({});
@@ -29,7 +29,7 @@ export const QueuePage: React.FC = () => {
       queue.enqueue({ id: 0, circle: '', state: ElementStates.Changing } as TCircle);
 
       update({});
-      await sleep(LOND_DELAY);
+      await sleep(LONG_DELAY);
 
       if (queue.elements[queue.head]) (queue.elements[queue.head] as TCircle).head = HEAD;
       if (queue.elements[queue.tail - 1]) (queue.elements[queue.tail - 1] as TCircle).circle = input;
@@ -49,7 +49,7 @@ export const QueuePage: React.FC = () => {
     if (queue.head >= 0 && queue.head < QUEUE_LENGTH) {
       if (queue.elements[queue.head]) (queue.elements[queue.head] as TCircle).state = ElementStates.Changing;
       update({});
-      await sleep(LOND_DELAY);
+      await sleep(LONG_DELAY);
       if (queue.elements[queue.head]) (queue.elements[queue.head] as TCircle).state = ElementStates.Default;
       if (queue.length <= 1) queue.clear();
       else {
@@ -69,7 +69,7 @@ export const QueuePage: React.FC = () => {
     setIsLoading(true);
     queue.clear();
     update({});
-    await sleep(LOND_DELAY);
+    await sleep(LONG_DELAY);
     setIsLoading(false);
   }
 

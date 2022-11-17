@@ -9,7 +9,7 @@ import { ElementStates } from "../../types/element-states";
 import { Circle } from "../ui/circle/circle";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
-import { SHORT_DELAY, LOND_DELAY, HEAD, TAIL } from "../../utils/constants";
+import { SHORT_DELAY, LONG_DELAY, HEAD, TAIL } from "../../utils/constants";
 import { LinkedList, MAX_INPUT_LENGTH, MIN_INPUT_LENGTH } from "./utils";
 
 
@@ -50,14 +50,14 @@ export const ListPage: React.FC = () => {
         tmp.head = (<Circle letter={input} state={ElementStates.Changing} isSmall={true} ></Circle>);
         list.prepend(tmp);
         update({});
-        await sleep(LOND_DELAY);
+        await sleep(LONG_DELAY);
         tmp.state = ElementStates.Default;
         tmp.head = HEAD;
         tmp.tail = TAIL;
       } else {
         list.head.value.head = (<Circle letter={input} state={ElementStates.Changing} isSmall={true} ></Circle>);
         update({});
-        await sleep(LOND_DELAY);
+        await sleep(LONG_DELAY);
 
         let tmp: TCircle = ({ id: 0, circle: input, state: ElementStates.Modified, head: HEAD });
         list.head.value.head = ''
@@ -83,14 +83,14 @@ export const ListPage: React.FC = () => {
         tmp.head = (<Circle letter={input} state={ElementStates.Changing} isSmall={true} ></Circle>);
         list.append(tmp);
         update({});
-        await sleep(LOND_DELAY);
+        await sleep(LONG_DELAY);
         tmp.state = ElementStates.Default;
         tmp.head = HEAD;
         tmp.tail = TAIL;
       } else {
         list.tail.value.head = (<Circle letter={input} state={ElementStates.Changing} isSmall={true} ></Circle>);
         update({});
-        await sleep(LOND_DELAY);
+        await sleep(LONG_DELAY);
         let tmp: TCircle = ({ id: 0, circle: input, state: ElementStates.Modified, tail: TAIL });
         list.tail.value.head = '';
         if (list.tail.value.head) list.tail.value.head = HEAD;
@@ -111,7 +111,7 @@ export const ListPage: React.FC = () => {
     if (list.head) {
       list.head.value.tail = (<Circle letter={list.head.value.circle} state={ElementStates.Changing} isSmall={true} ></Circle>);
       list.head.value.circle = ''
-      await sleep(LOND_DELAY);
+      await sleep(LONG_DELAY);
       update({});
       list.deleteHead();
       setHeadTail();
@@ -123,7 +123,7 @@ export const ListPage: React.FC = () => {
     if (list.tail) {
       list.tail.value.tail = (<Circle letter={list.tail.value.circle} state={ElementStates.Changing} isSmall={true} ></Circle>);
       list.tail.value.circle = ''
-      await sleep(LOND_DELAY);
+      await sleep(LONG_DELAY);
       update({});
       list.tail.value.tail = '';
       list.deleteTail();
@@ -146,7 +146,7 @@ export const ListPage: React.FC = () => {
         tmp.tail = TAIL;
       } else if (list.head && 0 === Number.parseInt(inputIndex)) {
         list.head.value.head = (<Circle letter={input} state={ElementStates.Changing} isSmall={true} ></Circle>);
-        await sleep(LOND_DELAY);
+        await sleep(LONG_DELAY);
         update({});
         let tmp: TCircle = ({ id: 0, circle: input, state: ElementStates.Modified, head: HEAD });
         list.head.value.head = '';
@@ -214,7 +214,7 @@ export const ListPage: React.FC = () => {
           e.tail = (<Circle letter={e.circle} state={ElementStates.Changing} isSmall={true} ></Circle>);
           e.circle = '';
           update({});
-          await sleep(LOND_DELAY);
+          await sleep(LONG_DELAY);
 
           list.deleteByIndex(Number.parseInt(inputIndex))
           update({});
