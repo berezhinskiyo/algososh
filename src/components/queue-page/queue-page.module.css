@@ -1,0 +1,29 @@
+.input_box {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  max-width: 80%;
+  margin: auto;
+  gap: 12px; 
+  align-content: center;
+  justify-content: center;
+}
+.circle_box {
+  display: flex;
+  flex-direction: row;
+  align-items:baseline;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 48px auto 0 auto;
+  max-width: 1240px;
+  flex-wrap: wrap;
+  gap: 16px; 
+}
+.input{
+  width: 377px;
+}
+
+.button:nth-child(n+4){
+  margin-left: 68px;
+}
+

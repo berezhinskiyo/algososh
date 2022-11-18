@@ -1,0 +1,29 @@
+.input_box {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  box-sizing: border-box;
+  max-width: 40%;
+  margin: auto;
+  gap: 12px; 
+}
+.circle_box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 146px auto 0 auto;
+  max-width: 1240px;
+  flex-wrap: wrap;
+  gap: 16px; 
+}
+
+.circle {
+margin-top: 20px; 
+}
+
+    
+.input{
+  width: 377px;
+}
