@@ -7,7 +7,7 @@ import { sleep, swap } from "../../utils/functions";
 import { Circle } from '../ui/circle/circle';
 import { Input } from '../ui/input/input';
 import { Button } from '../ui/button/button';
-import { LONG_DELAY } from "../../utils/constants";
+import { sort } from "./utils";
 
 
 export const StringComponent: React.FC = () => {
@@ -18,27 +18,6 @@ export const StringComponent: React.FC = () => {
   const [, update] = useState({});
   const [input, setInput] = useState('');
 
-  const sort = async (arr: TCircle[]) => {
-    const { length } = arr;
-    if (length === 1) {
-      arr[0].state = ElementStates.Modified;
-      update({});
-      await sleep(LONG_DELAY);
-      return;
-    }
-    for (let i = 0; i < length / 2; i++) {
-      arr[length - 1 - i].state = ElementStates.Changing;
-      arr[i].state = ElementStates.Changing;
-      update({});
-      await sleep(LONG_DELAY);
-      swap(arr, i, length - 1 - i);
-      arr[length - 1 - i].state = ElementStates.Modified;
-      arr[i].state = ElementStates.Modified;
-      update({});
-      await sleep(LONG_DELAY);
-    }
-
-  }
 
   const expand = async () => {
 
@@ -50,7 +29,7 @@ export const StringComponent: React.FC = () => {
     update({});
     await sleep(1000)
     if (symbols.length > 0) {
-      await sort(symbols);
+      await sort(symbols, update);
     }
 
 

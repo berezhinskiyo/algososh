@@ -1,0 +1,5 @@
+{
+    "env": {
+        "recursion": "http://localhost:3000/recursion"
+    }
+}
