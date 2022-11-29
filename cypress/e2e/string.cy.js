@@ -3,7 +3,7 @@
 describe('Тестирование алгоритма разворота строки', () => {
     it('Корректно разворачивает строку с чётным количеством символов', () => {
 
-        cy.visit(Cypress.env('recursion'));
+        /*cy.visit(Cypress.env('recursion'));
         cy.get('.input_input__bAnmr')
             .type('1234');
         cy.get('.button_button__-o8Pu')
