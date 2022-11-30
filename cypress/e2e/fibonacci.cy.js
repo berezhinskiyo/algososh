@@ -11,7 +11,7 @@ describe('Фибоначчи', () => {
 
     })
 
-    it('Проверьте, что строка разворачивается корректно', () => {
+    it('Проверьте, что числа генерируются корректно', () => {
         cy.visit(`${Cypress.env('base_url')}${Cypress.env('fibonacci')}`);
         cy.clock();
         cy.get('.input_input__bAnmr')
