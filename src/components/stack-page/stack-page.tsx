@@ -10,7 +10,7 @@ import { ElementStates } from "../../types/element-states";
 import { Circle } from "../ui/circle/circle";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Stack, MAX_INPUT_LENGTH, MIN_INPUT_LENGTH } from "./utils";
-import { LONG_DELAY, SHORT_DELAY, TAIL } from "../../utils/constants";
+import { LONG_DELAY, SHORT_DELAY } from "../../utils/constants";
 
 export const StackPage: React.FC = () => {
   const [, update] = useState({});

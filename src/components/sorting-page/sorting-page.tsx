@@ -10,7 +10,7 @@ import { SortKind, TCircle } from "../../utils/types";
 import { ElementStates } from "../../types/element-states";
 import { Column } from "../ui/column/column";
 import { SHORT_DELAY } from "../../utils/constants";
-import { ARRAY_LENGTH, RANDOM_START, RANDOM_RANGE } from './utils'
+import { ARRAY_LENGTH, RANDOM_START, RANDOM_RANGE, bubbleSort, selectionSort } from './utils'
 
 export const SortingPage: React.FC = () => {
 
@@ -28,69 +28,7 @@ export const SortingPage: React.FC = () => {
       Math.floor(Math.random() * range))
       .map<TCircle>((e, i) => { return { id: i, circle: e.toString(), state: ElementStates.Default } as TCircle; });
   }
-  const selectionSort = async (arr: TCircle[], deriction: Direction) => {
-    const { length } = arr;
-    arr.forEach(t => t.state = ElementStates.Default);
-    for (let i = 0; i < length; i++) {
-      let maxInd = i;
-      arr[i].state = ElementStates.Changing;
-      for (let j = i + 1; j < length; j++) {
-        if (arr[j].state !== ElementStates.Modified) arr[j].state = ElementStates.Changing;
-        if (j > i + 1 && arr[j - 1].state !== ElementStates.Modified) arr[j - 1].state = ElementStates.Default;
-        update({});
-        await sleep(SHORT_DELAY);
-        if (deriction === Direction.Ascending) {
-          if (Number.parseInt(arr[maxInd].circle) > Number.parseInt(arr[j].circle)) {
-            maxInd = j;
-          }
-        }
-        else {
-          if (Number.parseInt(arr[maxInd].circle) < Number.parseInt(arr[j].circle)) {
-            maxInd = j;
-          }
-        }
-      }
-      if (i < length - 2) arr[length - 1].state = ElementStates.Default;
-      if (i !== maxInd) {
-        if (i < length - 2) arr[i].state = ElementStates.Default;
-        swap(arr, i, maxInd);
-      }
-      arr[i].state = ElementStates.Modified;
-      update({});
-      await sleep(SHORT_DELAY);
 
-    }
-
-  };
-
-  const bubbleSort = async (arr: TCircle[], deriction: Direction) => {
-    const { length } = arr;
-    arr.forEach(t => t.state = ElementStates.Default);
-    for (let i = 0; i < length; i++) {
-      for (let j = 0; j < length - i - 1; j++) {
-        arr[j + 1].state = ElementStates.Changing;
-        arr[j].state = ElementStates.Changing;
-        update({});
-        await sleep(SHORT_DELAY);
-        if (deriction === Direction.Ascending) {
-          if (Number.parseInt(arr[j].circle) > Number.parseInt(arr[j + 1].circle)) {
-            swap(arr, j, j + 1)
-          }
-        }
-        else {
-          if (Number.parseInt(arr[j].circle) < Number.parseInt(arr[j + 1].circle)) {
-            swap(arr, j, j + 1)
-          }
-        }
-        arr[j].state = ElementStates.Default;
-      }
-      arr[length - i - 1].state = ElementStates.Modified;
-      await sleep(SHORT_DELAY);
-      update({});
-
-    }
-
-  };
 
   const asc = async () => {
     setIsLoadingAsc(true);
@@ -113,9 +51,9 @@ export const SortingPage: React.FC = () => {
   };
   const render = async (direction: Direction) => {
     if (sortingKind === SortKind.Bubble) {
-      await bubbleSort(collection, direction);
+      await bubbleSort(collection, direction, update);
     } else {
-      await selectionSort(collection, direction);
+      await selectionSort(collection, direction, update);
     }
   }
 
