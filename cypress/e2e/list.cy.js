@@ -158,19 +158,20 @@ describe('Список', () => {
             }).then(() => {
                 cy.clock();
 
-                cy.get('.button_button__-o8Pu').eq(5).click();
+                cy.get('*[class*="button_button"]').eq(6).click();
                 cy.tick(500);
                 for (let i = 0; i < index; i++) {
-                    cy.get('.circle_circle__xMxdD').eq(i).should('have.css', 'border-color', 'rgb(210, 82, 225)');
+                    cy.get('*[class^="circle_circle__"]').eq(i).should('have.css', 'border-color', 'rgb(210, 82, 225)');
                     cy.tick(500);
                 }
-                cy.get('.circle_circle__xMxdD').eq(index).should('have.css', 'border-color', 'rgb(210, 82, 225)');
+                cy.get('*[class^="circle_circle__"]').eq(index).should('have.css', 'border-color', 'rgb(210, 82, 225)');
                 cy.get('.circle_small__uHqmw').eq(0).contains(text);
                 cy.get('.text_type_circle').last().should('have.value', '');
                 cy.tick(1000);
                 for (let i = 1; i < index; i++) {
                     cy.tick(500);
-                    cy.get('.circle_circle__xMxdD').eq(index - i).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+                    cy.get('*[class^="circle_circle__"]').eq(index - i).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+                    //cy.get('.circle_circle__xMxdD').eq(index - i).should('have.css', 'border-color', 'rgb(0, 50, 255)');
 
                 }
                 cy.get('.text_type_circle').should('have.length', initialCount - 1);
