@@ -68,5 +68,116 @@ describe('Список', () => {
         })
     });
 
+    it('Проверьте корректность добавления элемента по индексу', () => {
+        cy.visit(`${Cypress.env('base_url')}${Cypress.env('list')}`);
+        cy.clock();
+        cy.get('.input_input__bAnmr').eq(0)
+            .type('4');
+        cy.get('.input_input__bAnmr').eq(1)
+            .type('2');
+        cy.get('.button_button__-o8Pu').eq(4).click();
 
-})
+        cy.tick(1000);
+        cy.get('.circle_small__uHqmw').eq(0).contains(4);
+        cy.get('.circle_small__uHqmw').eq(0).should('have.css', 'border-color', 'rgb(210, 82, 225)');
+        cy.tick(1000);
+        cy.get('.circle_small__uHqmw').eq(0).contains(4);
+        cy.get('.circle_small__uHqmw').eq(0).should('have.css', 'border-color', 'rgb(210, 82, 225)');
+        cy.get('.circle_head__E38zo').first().contains('head');
+        cy.tick(1000);
+        cy.get('.circle_head__E38zo').eq(1).should('have.value', '');
+        cy.get('.text_type_circle').eq(2).contains(4);
+        cy.get('.circle_circle__xMxdD').eq(2).should('have.css', 'border-color', 'rgb(127, 224, 81)');
+        cy.tick(1000);
+        cy.get('.circle_circle__xMxdD').eq(2).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+
+        cy.clock().then((clock) => {
+            clock.restore()
+        })
+    });
+
+    it('Проверьте корректность удаления элемента из head', () => {
+        cy.visit(`${Cypress.env('base_url')}${Cypress.env('list')}`);
+
+        let initialCount = 0;
+        cy.get('.text_type_circle').then($els => {
+            initialCount = $els.length;
+            let text = '';
+            cy.get('.text_type_circle').eq(0).should(($p) => {
+                text = $p.text();
+            }).then(() => {
+                cy.clock();
+                cy.get('.button_button__-o8Pu').eq(2).click();
+                cy.get('.circle_small__uHqmw').eq(0).contains(text);
+
+                cy.get('.text_type_circle').eq(0).should('have.value', '');
+                cy.tick(1000);
+                cy.get('.text_type_circle').should('have.length', initialCount - 1);
+                cy.clock().then((clock) => {
+                    clock.restore()
+                });
+            });
+        });
+    });
+
+    it('Проверьте корректность удаления элемента из tail', () => {
+        cy.visit(`${Cypress.env('base_url')}${Cypress.env('list')}`);
+
+        let initialCount = 0;
+        cy.get('.text_type_circle').then($els => {
+            initialCount = $els.length;
+            let text = '';
+            cy.get('.text_type_circle').last().should(($p) => {
+                text = $p.text();
+            }).then(() => {
+                cy.clock();
+                cy.get('.button_button__-o8Pu').eq(3).click();
+                cy.get('.circle_small__uHqmw').eq(0).contains(text);
+
+                cy.get('.text_type_circle').last().should('have.value', '');
+                cy.tick(1000);
+                cy.get('.text_type_circle').should('have.length', initialCount - 1);
+                cy.clock().then((clock) => {
+                    clock.restore()
+                });
+            });
+        });
+    });
+
+    it('Проверьте корректность удаления элемента по индексу', () => {
+        cy.visit(`${Cypress.env('base_url')}${Cypress.env('list')}`);
+        const index = 2;
+        cy.get('.input_input__bAnmr').eq(1)
+            .type(index);
+        let initialCount = 0;
+        cy.get('.text_type_circle').then($els => {
+            initialCount = $els.length;
+            let text = '';
+            cy.get('.text_type_circle').eq(2).should(($p) => {
+                text = $p.text();
+            }).then(() => {
+                cy.clock();
+
+                cy.get('.button_button__-o8Pu').eq(5).click();
+                cy.tick(500);
+                for (let i = 0; i < index; i++) {
+                    cy.get('.circle_circle__xMxdD').eq(i).should('have.css', 'border-color', 'rgb(210, 82, 225)');
+                    cy.tick(500);
+                }
+                cy.get('.circle_circle__xMxdD').eq(index).should('have.css', 'border-color', 'rgb(210, 82, 225)');
+                cy.get('.circle_small__uHqmw').eq(0).contains(text);
+                cy.get('.text_type_circle').last().should('have.value', '');
+                cy.tick(1000);
+                for (let i = 1; i < index; i++) {
+                    cy.tick(500);
+                    cy.get('.circle_circle__xMxdD').eq(index - i).should('have.css', 'border-color', 'rgb(0, 50, 255)');
+
+                }
+                cy.get('.text_type_circle').should('have.length', initialCount - 1);
+                cy.clock().then((clock) => {
+                    clock.restore()
+                });
+            });
+        });
+    });
+});
